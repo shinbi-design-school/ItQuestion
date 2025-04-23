@@ -2,13 +2,13 @@ package bean;
 
 public class User implements java.io.Serializable {
 
-	private int id;
+	private int user_id;
 	private String username;
 	private String password;
 	private int score;
 	
-	public int getId() {
-		return id;
+	public int getUser_Id() {
+		return user_id;
 	}
 	public String getUsername() {
 		return username;
@@ -20,8 +20,8 @@ public class User implements java.io.Serializable {
 		return score;
 	}
 	
-	public void setId(int id) {
-		this.id=id;
+	public void setUser_Id(int user_id) {
+		this.user_id=user_id;
 	}
 	public void setUsername(String username) {
 		this.username=username;

@@ -26,7 +26,7 @@ public class QuestionDAO extends DAO {
 
             while (rs.next()) {
                 Question question = new Question(
-                    rs.getInt("id"),
+                    rs.getInt("question_id"),
                     rs.getString("question"),
                     rs.getString("option1"),
                     rs.getString("option2"),
@@ -69,13 +69,12 @@ public class QuestionDAO extends DAO {
     }
 
     
-    public boolean deleteQuestion(int id) {
-        String sql = "DELETE FROM QUESTION WHERE id = ?";
+    public boolean deleteQuestion(int question_id) {
+        String sql = "DELETE FROM QUESTION WHERE question_id = ?";
 
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
+            stmt.setInt(1, question_id);
             int rowsDeleted = stmt.executeUpdate();
             return rowsDeleted > 0;
         } catch (Exception e) {

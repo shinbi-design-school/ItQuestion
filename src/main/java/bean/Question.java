@@ -2,7 +2,7 @@ package bean;
 
 public class Question implements java.io.Serializable {
 
-	private int id;
+	private int question_id;
 	private String question;
 	private String option1;
 	private String option2;
@@ -12,8 +12,8 @@ public class Question implements java.io.Serializable {
 	private String hint;
 	private String description;
 	
-	public Question(int id, String question, String option1, String option2, String option3, String option4, int correct_option, String hint, String description) {
-		this.id=id;
+	public Question(int question_id, String question, String option1, String option2, String option3, String option4, int correct_option, String hint, String description) {
+		this.question_id=question_id;
 		this.question=question;
 		this.option1=option1;
 		this.option2=option2;
@@ -24,8 +24,8 @@ public class Question implements java.io.Serializable {
 		this.description=description;
 	}
 	
-	public int getId() {
-		return id;
+	public int getQuestion_Id() {
+		return question_id;
 	}
 	public String getQuestion() {
 		return question;
@@ -52,8 +52,8 @@ public class Question implements java.io.Serializable {
 		return description;
 	}
 	
-	public void setId(int id) {
-		this.id=id;
+	public void setQuestion_Id(int question_id) {
+		this.question_id=question_id;
 	}
 	public void setQuestion(String question) {
 		this.question=question;

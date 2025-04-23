@@ -5,9 +5,9 @@
 		name="jdbc/itquestion"
 		auth="Container"
 		type="javax.sql.DataSource"
-		driverClassName="org.h2.Driver"
-		url="jdbc:mysql:tcp://localhost/~/book"
-		username="sa"
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/itquestion"
+		username="user"
 		password=""
 	/>
 </Context>

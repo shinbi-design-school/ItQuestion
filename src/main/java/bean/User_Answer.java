@@ -2,13 +2,16 @@ package bean;
 
 public class User_Answer {
 	
+	private Question question;
 	private int id;
 	private int user_id;
 	private int question_id;
 	private int selected_option;
 	private boolean is_correct;
 
-	
+	public Question getQuestion() {
+		return question;
+	}
 	public int getId() {
 		return id;
 	}
@@ -21,11 +24,14 @@ public class User_Answer {
 	public int getSelected_Option() {
 		return selected_option;
 	}
-	public boolean getIs_correct() {
+	public boolean getIs_Correct() {
 		return is_correct;
 	}
 	
 
+	public void setQuestion(Question question) {
+		this.question=question;
+	}
 	public void setId(int id) {
 		this.id=id;
 	}
@@ -38,7 +44,7 @@ public class User_Answer {
 	public void setSelected_Option(int selected_option) {
 		this.selected_option=selected_option;
 	}
-	public boolean setIs_correct(boolean is_correct) {
+	public boolean setIs_Correct(boolean is_correct) {
 		return is_correct;
 	}
 	
