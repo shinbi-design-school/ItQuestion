@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<Context reloadable="false"/>-->
+<Context reloadable="true">
+	<Resource 
+		name="jdbc/itquestion"
+		auth="Container"
+		type="javax.sql.DataSource"
+		driverClassName="org.h2.Driver"
+		url="jdbc:mysql:tcp://localhost/~/book"
+		username="sa"
+		password=""
+	/>
+</Context>
