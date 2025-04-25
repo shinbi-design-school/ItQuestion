@@ -127,7 +127,7 @@
 
   <div class="container">
     <h1>ログイン</h1>
-    <form id="loginForm" action="LoginServlet" method="post" onsubmit="return validateForm()">
+    <form id="loginForm" action="Login.action" method="post" onsubmit="return validateForm()">
       <label for="username">ユーザー名</label>
       <input type="text" id="username" name="username" placeholder="ユーザー名">
 

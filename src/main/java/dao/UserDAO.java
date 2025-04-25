@@ -7,17 +7,17 @@ import java.sql.ResultSet;
 import bean.User;
 
 public class UserDAO extends DAO{
-	public User search(String username, String password, int score)throws Exception{
+	public User search(String username, String password)throws Exception{
 		User user=null;
 		
 		Connection con=getConnection();
 		
 		PreparedStatement st;
 		st=con.prepareStatement(
-				"select * from user where username=? and password=? and score=?");
+				"select * from user where username=? and password=?");
 		st.setString(1, username);
 		st.setString(2, password);
-		st.setInt(3, score);
+	
 		ResultSet rs=st.executeQuery();
 		
 		while(rs.next()) {

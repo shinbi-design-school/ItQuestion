@@ -1,4 +1,4 @@
-package ItQuestion;
+package itquestion;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,13 +15,13 @@ public class LoginAction extends Action {
 		
 		String username=request.getParameter("username");
 		String password=request.getParameter("password");
-		int score=Integer.parseInt(request.getParameter("score"));
+		
 		UserDAO dao=new UserDAO();
-		User user=dao.search(username,password,score);
+		User user=dao.search(username,password);
 		
 		if(user!=null) {
-			session.setAttribute("user", user);
-			return "login-out.jsp";
+			 session.setAttribute("username", user.getUsername());
+			return "top.jsp";
 		}
 		
 		return "login-error.jsp";

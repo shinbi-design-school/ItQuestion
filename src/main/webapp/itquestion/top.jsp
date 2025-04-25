@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
     String username = (String) session.getAttribute("username");
+    boolean isLoggedIn = (username != null);
 %>
 <!DOCTYPE html>
 <html lang="ja">
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+
   <div class="matrix-bg">
     <div class="matrix-line" style="left: 10%; animation-delay: 0s;"></div>
     <div class="matrix-line" style="left: 30%; animation-delay: 0.5s;"></div>
@@ -19,10 +21,17 @@
   </div>
 
   <div class="container">
-    <% if (username != null) { %>
-      <div style="position: absolute; top: 10px; left: 20px; color: #00f0ff;">
-        ようこそ、<%= username %>さん
-      </div>
+    <%-- ユーザー表示バー --%>
+    <div style="position: absolute; top: 10px; left: 20px; color: #00f0ff;">
+      <% if (isLoggedIn) { %>
+        ようこそ、<%= username %>さん |
+        <a href="Logout.action" style="color: #00f0ff; text-decoration: underline;">ログアウト</a>
+      <% } else { %>
+        ようこそ、ゲストさん
+      <% } %>
+    </div>
+
+    <% if (isLoggedIn) { %>
       <h1>クイズ</h1>
       <button class="btn" onclick="location.href='mondai.jsp'">スタート</button>
     <% } else { %>
@@ -31,7 +40,16 @@
       <button class="btn btn-guest" onclick="location.href='mondai.html'">ゲストモードで遊ぶ</button>
       <button class="btn" onclick="location.href='ranking.jsp'">ランキングを見る</button>
     <% } %>
+
     <div class="footer">© 2025 IT Quiz Project</div>
   </div>
+
+<!-- 音声ファイルの読み込み -->
+<audio id="bgm" src="../sound/start.mp3" loop></audio>
+<audio id="click" src="../sound/click.mp3"></audio>
+
+
+
+
 </body>
 </html>
