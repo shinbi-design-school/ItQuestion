@@ -8,9 +8,27 @@
 <head>
   <meta charset="UTF-8">
   <title>トップ | アイティークイズゲーム</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/itquestion/css/style.css">
+  
+  <script src="/itquestion/js/sound.js"></script>
+
+
+
+
+  
 </head>
 <body>
+
+<script>
+window.addEventListener('click', () => {
+  console.log('top.jspでクリック→親にBGM開始命令');
+  if (parent && typeof parent.startBGMIfNeeded === 'function') {
+    parent.startBGMIfNeeded();
+  }
+});
+</script>
+
+
 
   <div class="matrix-bg">
     <div class="matrix-line" style="left: 10%; animation-delay: 0s;"></div>
@@ -33,21 +51,16 @@
 
     <% if (isLoggedIn) { %>
       <h1>クイズ</h1>
-      <button class="btn" onclick="location.href='mondai.jsp'">スタート</button>
+      <button class="btn" onclick="parent.location.href='Mondai.action'">スタート</button>
     <% } else { %>
       <h1>アイティークイズゲーム</h1>
       <button class="btn" onclick="location.href='login.jsp'">ログイン</button>
-      <button class="btn btn-guest" onclick="location.href='mondai.html'">ゲストモードで遊ぶ</button>
-      <button class="btn" onclick="location.href='ranking.jsp'">ランキングを見る</button>
+      <button class="btn" onclick="parent.location.href='Mondai.action'">ゲストモードで遊ぶ</button>
+      <button class="btn" onclick="location.href='Ranking.action'">ランキングを見る</button>
     <% } %>
 
     <div class="footer">© 2025 IT Quiz Project</div>
   </div>
-
-<!-- 音声ファイルの読み込み -->
-<audio id="bgm" src="../sound/start.mp3" loop></audio>
-<audio id="click" src="../sound/click.mp3"></audio>
-
 
 
 

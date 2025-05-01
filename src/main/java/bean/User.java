@@ -7,6 +7,17 @@ public class User implements java.io.Serializable {
 	private String password;
 	private int score;
 	
+	public User() {
+		//初期化
+	}
+	
+	public User(int user_id, String username, String password, int score) {
+		this.user_id = user_id;
+		this.username = username;
+		this.password = password;
+		this.score = score;
+	 }
+	
 	public int getUser_Id() {
 		return user_id;
 	}

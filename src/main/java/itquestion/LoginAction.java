@@ -19,10 +19,11 @@ public class LoginAction extends Action {
 		UserDAO dao=new UserDAO();
 		User user=dao.search(username,password);
 		
-		if(user!=null) {
-			 session.setAttribute("username", user.getUsername());
-			return "top.jsp";
-		}
+		if(user != null) {
+			  session.setAttribute("username", user.getUsername());
+			  session.setAttribute("userId", user.getUser_Id());  // ← これで保存OKになる！
+			  return "top.jsp";
+			}
 		
 		return "login-error.jsp";
 	}

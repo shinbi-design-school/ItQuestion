@@ -24,9 +24,10 @@ public class User_Answer {
 	public int getSelected_Option() {
 		return selected_option;
 	}
-	public boolean getIs_Correct() {
-		return is_correct;
+	public boolean getIs_correct() {
+	    return is_correct;
 	}
+
 	
 
 	public void setQuestion(Question question) {
@@ -44,8 +45,7 @@ public class User_Answer {
 	public void setSelected_Option(int selected_option) {
 		this.selected_option=selected_option;
 	}
-	public boolean setIs_Correct(boolean is_correct) {
-		return is_correct;
+	public void setIs_correct(boolean is_correct) {
+	    this.is_correct = is_correct;
 	}
-	
 }

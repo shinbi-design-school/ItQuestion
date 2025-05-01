@@ -33,6 +33,7 @@ public class FrontController extends HttpServlet {
 			String name = path.replace(".action", "Action").replace('/', '.'); 
 			Action action=(Action)Class.forName(name).getDeclaredConstructor().newInstance();
 			String url=action.execute(request, response);
+			
 			request.getRequestDispatcher(url).forward(request, response);
 		}catch(Exception e) {
 			e.printStackTrace(out);

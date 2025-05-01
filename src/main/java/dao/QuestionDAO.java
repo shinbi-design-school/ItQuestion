@@ -14,6 +14,39 @@ public class QuestionDAO extends DAO {
     public QuestionDAO() {
         super();  
     }
+    
+ 
+    public List<Question> getRandomQuestions(int limit) {
+        List<Question> questions = new ArrayList<>();
+        String sql = "SELECT * FROM QUESTION ORDER BY RAND() LIMIT ?"; // ★固定値→プレースホルダに
+
+        try (Connection con = getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit); // ★ここで実際の数を指定（例：20）
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Question question = new Question(
+                        rs.getInt("question_id"),
+                        rs.getString("question"),
+                        rs.getString("option1"),
+                        rs.getString("option2"),
+                        rs.getString("option3"),
+                        rs.getString("option4"),
+                        rs.getInt("correct_option"), // ← DBと一致済み
+                        rs.getString("hint"),
+                        rs.getString("description")
+                    );
+                    questions.add(question);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return questions;
+    }
+
 
    
     public List<Question> getAllQuestions() {

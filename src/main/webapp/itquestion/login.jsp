@@ -116,6 +116,14 @@
     }
   </style>
 </head>
+<script>
+window.addEventListener('click', () => {
+  console.log('login.jspでクリック→親にBGM開始命令');
+  if (parent && typeof parent.startBGMIfNeeded === 'function') {
+    parent.startBGMIfNeeded();
+  }
+});
+</script>
 <body>
   <div class="matrix-bg">
     <div class="matrix-line" style="left: 10%; animation-delay: 0s;"></div>

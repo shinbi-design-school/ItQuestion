@@ -23,6 +23,9 @@ public class Question implements java.io.Serializable {
 		this.hint=hint;
 		this.description=description;
 	}
+	public Question() {
+	    // 初期化
+	}
 	
 	public int getQuestion_Id() {
 		return question_id;

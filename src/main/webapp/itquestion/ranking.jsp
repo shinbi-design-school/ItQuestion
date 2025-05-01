@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -108,18 +109,59 @@
   </style>
 </head>
 <body>
+
+  <canvas id="matrix"></canvas>
+
+  <h1>ランキング</h1>
+  <table>
+    <tr>
+      <th>順位</th>
+      <th>ユーザー名</th>
+      <th>スコア</th>
+    </tr>
+   
+    <c:choose>
+      <c:when test="${not empty rankingList}">
+        <c:set var="rank" value="0" /> <!-- 順位カウント用変数 -->
+        
+      
+        <c:forEach var="user" items="${rankingList}">
+          <c:set var="rank" value="${rank + 1}" /> <!-- 順位をインクリメント -->
+          <tr>
+            <td>${rank}</td> <!-- リストの順番で順位を設定 -->
+            <td>${user.username}</td> <!-- username を表示 -->
+            <td>${user.score}</td> <!-- score を表示 -->
+          </tr>
+        </c:forEach>
+      </c:when>
+      <c:otherwise>
+        <tr>
+          <td colspan="3">ランキング情報がありません。</td>
+        </tr>
+      </c:otherwise>
+    </c:choose>
+  </table>
+
+  <a href="top.jsp" class="home-icon" title="トップへ戻る">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+      <path d="M12 3l9 8h-3v10h-4v-6H10v6H6V11H3l9-8z"/>
+    </svg>
+  </a>
+
+<!--
+<body>
   <canvas id="matrix"></canvas>
 
   <h1>ランキング</h1>
   <table>
     <tr><th>順位</th><th>ユーザー名</th><th>スコア</th></tr>
-    <c:set var="rank" value="0" /> <!-- 順位カウント用変数 -->
+    <c:set var="rank" value="0" /> 
     <c:forEach var="user" items="${rankingList}">
-      <c:set var="rank" value="${rank + 1}" /> <!-- 順位をインクリメント -->
+      <c:set var="rank" value="${rank + 1}" /> 
       <tr>
-        <td>${rank}</td> <!-- ユーザーIDではなくリストの順番で順位を設定 -->
-        <td>${user.username}</td> <!-- username を表示 -->
-        <td>${user.score}</td> <!-- score を表示 -->
+        <td>${rank}</td> 
+        <td>${user.username}</td> 
+        <td>${user.score}</td>
       </tr>
     </c:forEach>
   </table>
@@ -129,7 +171,7 @@
       <path d="M12 3l9 8h-3v10h-4v-6H10v6H6V11H3l9-8z"/>
     </svg>
   </a>
-
+-->
 
 
   <script>
