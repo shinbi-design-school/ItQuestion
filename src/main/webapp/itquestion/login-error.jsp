@@ -105,9 +105,9 @@ window.addEventListener('click', () => {
   <div class="container">
     <h1>ログインエラー</h1>
 
-    <button type="button" class="btn" onclick="location.href='top.jsp'">トップへ戻る</button>
-    <button type="button" class="btn" onclick="location.href='login.jsp'">ログイン画面へ戻る</button>
-  </div>
+    <button type="button" class="btn" onclick="parent.mainFrame.location.href='top.jsp'">トップへ戻る</button>
+	<button type="button" class="btn" onclick="parent.mainFrame.location.href='login.jsp'">ログイン画面へ戻る</button>
+
 </body>
 </html>
 

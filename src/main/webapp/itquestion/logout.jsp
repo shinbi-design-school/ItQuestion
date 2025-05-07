@@ -25,9 +25,10 @@ window.addEventListener('click', () => {
   </div>
 
   <div class="container">
-    <h1>ログアウトしました</h1>
-    <p>ご利用ありがとうございました。</p>
-    <button class="btn" onclick="location.href='top.jsp'">トップに戻る</button>
+  <h1>ログアウトしました</h1>
+  <p>ご利用ありがとうございました。</p>
+  <button class="btn" onclick="parent.mainFrame.location.href='top.jsp'">トップに戻る</button>
   </div>
+
 </body>
 </html>

@@ -145,7 +145,10 @@ window.addEventListener('click', () => {
       <div id="errorMsg" class="error"></div>
 
       <button type="submit" class="btn">ログイン</button>
-      <button type="button" class="btn btn-guest" onclick="location.href='mondai.jsp'">ゲストモードで遊ぶ</button>
+     <button type="button" class="btn btn-guest" onclick="parent.mainFrame.location.href='GuestStart.action'">
+ 			ゲストモードで遊ぶ
+	 </button>
+     
     </form>
   </div>
 

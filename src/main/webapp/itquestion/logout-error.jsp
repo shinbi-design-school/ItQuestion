@@ -16,10 +16,11 @@
   </div>
 
   <div class="container">
-    <h1>ログアウトできませんでした</h1>
-    <p>セッションがすでに切れている可能性があります。</p>
-    <button class="btn" onclick="location.href='login.jsp'">ログイン画面に戻る</button>
-  </div>
+  <h1>ログアウトできませんでした</h1>
+  <p>セッションがすでに切れている可能性があります。</p>
+  <button class="btn" onclick="parent.mainFrame.location.href='login.jsp'">ログイン画面に戻る</button>
+</div>
+
 </body>
 </html>
 

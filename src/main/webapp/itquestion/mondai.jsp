@@ -188,8 +188,10 @@
 </head>
 <body>
 <%
-    List<Question> questionList = (List<Question>)request.getAttribute("questionList");
+    List<Question> questionList = (List<Question>) request.getAttribute("questionList");
+    
 %>
+
 <script>
 window.addEventListener("load", () => {
 	  setTimeout(() => {
@@ -263,39 +265,25 @@ window.addEventListener("load", () => {
 
 
 <script>
-  window.onload = function () {
-    console.log("window.onloadスタート");
-    console.log("questions配列の中身（受け取った全問題）:", questions);
 
-    let timeLeft = 60;
-    const timerDisplay = document.getElementById("timer");
-    const hint = document.getElementById("hint");
+let currentIndex = 0;
+let countdown;
 
-    displayQuestion(currentIndex);
+window.onload = function () {
+	  console.log("window.onloadスタート");
+	  console.log("questions配列の中身（受け取った全問題）:", questions);
 
-    const countdown = setInterval(() => {
-      timeLeft--;
-      timerDisplay.textContent = timeLeft + '秒';
+	  // 🎵 BGMをmondai.mp3に切り替え（300ms遅延で再生ブロックを回避）
+	  setTimeout(() => {
+	    if (parent && typeof parent.changeBGM === "function") {
+	      parent.changeBGM("/itquestion/sound/mondai.mp3");
+	      console.log("mondai.jspでBGMをmondai.mp3に切り替え");
+	    }
+	  }, 300);
 
-      if (timeLeft === 30) {
-        hint.classList.add("show");
-      }
-
-      if (timeLeft <= 0) {
-        clearInterval(countdown);
-        timerDisplay.textContent = "時間切れ！";
-      }
-    }, 1000);
-  };
-
-  let currentIndex = 0;
-  let timeLeft = 60;
-  let countdown; // タイマーのインターバルID
-
-  window.onload = function () {
-    console.log("window.onloadスタート");
-    displayQuestion(currentIndex); // 最初の1問目を表示
-  };
+	  // ✅ タイマーは displayQuestion の中に統一
+	  displayQuestion(currentIndex); // 最初の1問目を表示
+	};
 
   function displayQuestion(index) {
     clearInterval(countdown);        // ★ 前のタイマーを止める
@@ -357,14 +345,13 @@ window.addEventListener("load", () => {
 
 	  // 次の問題へ
 	  currentIndex++;
-	  if (currentIndex < questions.length) {
-	    displayQuestion(currentIndex);
-	  } else {
-	    window.location.href = "Result.action"; // ← クイズ完了後の画面（後ほど作る）
-	  }
-	}
+		if (currentIndex < questions.length) {
+		  displayQuestion(currentIndex);
+		} else {
+		  parent.mainFrame.location.href = "Result.action"; // ← ここを修正！
+		}
 
-
+}
 </script>
 
 </body>

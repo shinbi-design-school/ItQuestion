@@ -115,4 +115,20 @@ public class QuestionDAO extends DAO {
             return false;
         }
     }
+    
+    public int getCorrectOption(int questionId) throws Exception {
+        String sql = "SELECT correct_option FROM question WHERE question_id = ?";
+        try (Connection con = getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, questionId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("correct_option");
+                } else {
+                    throw new Exception("正解が見つかりません（question_id = " + questionId + "）");
+                }
+            }
+        }
+    }
+
 }

@@ -50,14 +50,19 @@ window.addEventListener('click', () => {
     </div>
 
     <% if (isLoggedIn) { %>
-      <h1>クイズ</h1>
-      <button class="btn" onclick="parent.location.href='Mondai.action'">スタート</button>
-    <% } else { %>
-      <h1>アイティークイズゲーム</h1>
-      <button class="btn" onclick="location.href='login.jsp'">ログイン</button>
-      <button class="btn" onclick="parent.location.href='Mondai.action'">ゲストモードで遊ぶ</button>
-      <button class="btn" onclick="location.href='Ranking.action'">ランキングを見る</button>
-    <% } %>
+  <h1>クイズ</h1>
+  <button class="btn" onclick="parent.mainFrame.location.href='Mondai.action'">スタート</button>
+	<% } else { %>
+  <h1>アイティークイズゲーム</h1>
+  <button class="btn" onclick="parent.mainFrame.location.href='login.jsp'">ログイン</button>
+  <button class="btn" onclick="parent.mainFrame.location.href='register.jsp'">新規登録</button>
+  
+   <button type="button" class="btn btn-guest" onclick="parent.mainFrame.location.href='GuestStart.action'">
+ 			ゲストモードで遊ぶ
+   </button>
+  <button class="btn" onclick="parent.mainFrame.location.href='Ranking.action'">ランキングを見る</button>
+	<% } %>
+
 
     <div class="footer">© 2025 IT Quiz Project</div>
   </div>

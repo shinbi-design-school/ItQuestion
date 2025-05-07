@@ -16,12 +16,13 @@
       overflow: hidden;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
 
     h1, table, .btn, .home-icon {
       position: relative;
@@ -76,39 +77,44 @@
       box-shadow: 0 0 20px #00eaff;
     }
 
-    .home-icon {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(145deg, #00f0ff, #005a66);
-      box-shadow: 0 0 20px #00f0ff, 0 0 40px #00f0ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      z-index: 3;
-      border-radius: 0px; /* 完全な四角 */
-    }
 
-    .home-icon svg {
-      fill: #000;
-      transition: transform 0.3s ease;
-    }
+    .ending-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 90px; /* ← home-iconと被らないよう少し左にずらす */
+  width: 56px;
+  height: 56px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
 
-    .home-icon:hover {
-      background: linear-gradient(145deg, #00d5e2, #007b8a);
-      box-shadow: 0 0 30px #00eaff, 0 0 60px #00eaff;
-    }
+.ending-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
 
-    .home-icon:hover svg {
-      transform: scale(1.2);
-    }
+.ending-icon:hover img {
+  transform: scale(1.1);
+}
+    
   </style>
 </head>
 <body>
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (parent && typeof parent.changeBGM === "function") {
+      parent.changeBGM("/itquestion/sound/ranking.mp3");
+      console.log("🎵 result.jsp で BGM を ranking.mp3 に切り替えました");
+    }
+  }, 300); // 再生ブロック対策の遅延
+});
+</script>
 
   <canvas id="matrix"></canvas>
 
@@ -141,12 +147,10 @@
       </c:otherwise>
     </c:choose>
   </table>
-
-  <a href="top.jsp" class="home-icon" title="トップへ戻る">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-      <path d="M12 3l9 8h-3v10h-4v-6H10v6H6V11H3l9-8z"/>
-    </svg>
-  </a>
+	
+ 	<a href="javascript:void(0);" class="ending-icon" onclick="parent.mainFrame.location.href='ending.jsp'" title="エンディングへ">
+  		<img src="../image/fin2.png" alt="Fin" />
+	</a>
 
 <!--
 <body>
@@ -175,38 +179,45 @@
 
 
   <script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+  let columns, drops;
 
-    canvas.height = window.innerHeight;
+  function resizeCanvas() {
+    // 画面サイズに合わせる
     canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    const columns = Math.floor(canvas.width / 20);
-    const drops = new Array(columns).fill(0);
+    // 列数を再計算
+    columns = Math.floor(canvas.width / 20);
+    drops = Array(columns).fill(0); // 再定義することで描画のズレを防ぐ
+  }
 
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas(); // 初回実行
 
-      ctx.fillStyle = "#00ff00";
-      ctx.font = "16px monospace";
+  function drawMatrixEffect() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00ff00";
+    ctx.font = "16px monospace";
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = "|";
-        const x = i * 20;
-        const y = drops[i] * 20;
+    for (let i = 0; i < columns; i++) {
+      const char = Math.floor(Math.random() * 10).toString();
+      const x = i * 20;
+      const y = drops[i] * 20;
+      ctx.fillText(char, x, y);
 
-        ctx.fillText(text, x, y);
-
-        if (y > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        } else {
-          drops[i]++;
-        }
+      // 画面サイズ変更に対応させるための修正
+      if (y > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      } else {
+        drops[i]++;
       }
     }
+  }
 
-    setInterval(draw, 33);
+  setInterval(drawMatrixEffect, 33);
   </script>
 </body>
 </html>

@@ -49,40 +49,41 @@ public class UserDAO extends DAO{
         return null;
     }
 	
-	 // 最新スコア取得
+	// 最新スコア取得
     public int getNowScore(int userId) throws Exception {
-        String query = "SELECT MAX(now_score) FROM User_Answer WHERE user_id = ?"; 
+        String query = "SELECT SUM(now_score) FROM User_Answer WHERE user_id = ?";
         try (Connection con = getConnection();
              PreparedStatement st = con.prepareStatement(query)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
-                return rs.next() ? rs.getInt(1) : 0; // ユーザーごとの最高スコアを取得
+                return rs.next() ? rs.getInt(1) : 0; // ユーザーごとのスコア合計を取得
             }
         }
     }
     // ランキング取得
+ // ランキング取得（ゲストuser_id=9を除外）
     public List<User> getRanking() throws Exception {
-    	
         List<User> rankingList = new ArrayList<>();
-        String query = "SELECT user_id, username, score FROM User ORDER BY score DESC LIMIT 10";
-        
+        String query = "SELECT user_id, username, score FROM User WHERE user_id != 9 ORDER BY score DESC LIMIT 10";
+
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
-            
+
             while (rs.next()) {
                 User user = new User(rs.getInt("user_id"), rs.getString("username"), "", rs.getInt("score"));
                 rankingList.add(user);
             }
-            
-            System.out.println("取得したランキングリスト: " + rankingList); // 追加
+
+            System.out.println("取得したランキングリスト（ゲスト除外済）: " + rankingList);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("ランキング取得時のエラー: " + e.getMessage()); // 追加
+            System.out.println("ランキング取得時のエラー: " + e.getMessage());
         }
 
         return rankingList;
     }
+
  // スコア更新
     public void updateScore(int userId, int newScore) throws Exception {
         String query = "UPDATE User SET score = ? WHERE user_id = ? AND score < ?";
@@ -95,5 +96,31 @@ public class UserDAO extends DAO{
             System.out.println("スコア更新: " + updatedRows + "件");
         }
     }
+    public boolean insert(User user) throws Exception {
+        // 重複チェックSQL
+        String checkSql = "SELECT COUNT(*) FROM USER WHERE username = ?";
+        // 登録SQL
+        String insertSql = "INSERT INTO USER (username, password) VALUES (?, ?)";
+
+        try (Connection con = getConnection()) {
+            // ① ユーザー名の重複を確認
+            try (PreparedStatement checkStmt = con.prepareStatement(checkSql)) {
+                checkStmt.setString(1, user.getUsername());
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return false;  // ユーザー名がすでに存在
+                }
+            }
+
+            // ② 新規登録
+            try (PreparedStatement insertStmt = con.prepareStatement(insertSql)) {
+                insertStmt.setString(1, user.getUsername());
+                insertStmt.setString(2, user.getPassword()); // ハッシュ済み
+                int rows = insertStmt.executeUpdate();
+                return rows > 0;
+            }
+        }
+    }
+
 
 }

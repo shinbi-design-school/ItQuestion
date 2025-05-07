@@ -3,7 +3,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ending | Special Thanks</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
@@ -17,11 +16,12 @@
       position: relative;
     }
     canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  width: 100vw;
+	  height: 100vh;
+	}
     .mask-layer {
       position: fixed;
       top: 0;
@@ -45,20 +45,18 @@
     .typing-line {
       display: block;
       font-size: 4vw;
-      max-font-size: 24px;
       margin: 8px 0;
       text-shadow: 0 0 10px #00ff00;
       min-height: 1.5em;
     }
-    .special-line {
-      margin-top: 0;
-      margin-bottom: 16px;
+    .members-line {
+      font-size: 6vw;
+      font-weight: bold;
     }
     .member-line {
       display: flex;
       justify-content: space-between;
       font-size: 4vw;
-      max-font-size: 24px;
       margin: 6px 0;
       text-shadow: 0 0 10px #00ff00;
     }
@@ -93,13 +91,27 @@
       .typing-line, .member-line {
         font-size: 24px;
       }
+      .members-line {
+        font-size: 32px;
+      }
     }
   </style>
 </head>
 <body>
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (parent && typeof parent.changeBGM === "function") {
+      parent.changeBGM("/itquestion/sound/ending.mp3");
+      console.log("🎵 ending.jspでBGMをending.mp3に切り替えました");
+    }
+  }, 300); // 再生ブロック回避のための遅延
+});
+</script>
 <canvas id="matrix"></canvas>
 <div class="mask-layer"></div>
 <div class="box" id="typing-box"></div>
+
 <script>
   const lines = [
     "Special Thanks",
@@ -112,7 +124,6 @@
     "Advisers",
     "Mr. Tanaka    Ms. Usui",
     "Ms. Akabane  Mr. Takita",
-    "",
     "Thank you for playing!"
   ];
 
@@ -164,9 +175,16 @@
       if (charIndex === 0) {
         currentLine = document.createElement("div");
         currentLine.className = "typing-line";
-        if (lineIndex === 0) {
-          currentLine.classList.add("special-line");
+
+        if (
+          line === "Members" ||
+          line === "Special Thanks" ||
+          line === "Advisers" ||
+          line === "Thank you for playing!"
+        ) {
+          currentLine.classList.add("members-line");
         }
+
         box.appendChild(currentLine);
       }
 
@@ -182,34 +200,52 @@
   }
 
   function addToTopButton() {
-    const div = document.createElement("div");
-    div.style.textAlign = "center";
-    const btn = document.createElement("button");
-    btn.className = "to-top";
-    btn.textContent = "To Top";
-    btn.onclick = () => location.href = 'top.html';
-    div.appendChild(btn);
-    box.appendChild(div);
-  }
+	    const div = document.createElement("div");
+	    div.style.textAlign = "center";
+	    const btn = document.createElement("button");
+	    btn.className = "to-top";
+	    btn.textContent = "To Top";
+	    btn.onclick = () => {
+	    	  parent.mainFrame.location.href = 'Remove.action';
+	    	};
+
+	    div.appendChild(btn);
+	    box.appendChild(div);
+	  }
 
   type();
 
+
   const canvas = document.getElementById("matrix");
   const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const columns = Math.floor(canvas.width / 20);
-  const drops = Array(columns).fill(0);
-  function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  let columns, drops;
+
+  function resizeCanvas() {
+    // 画面サイズに合わせる
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // 列数を再計算
+    columns = Math.floor(canvas.width / 20);
+    drops = Array(columns).fill(0); // 再定義することで描画のズレを防ぐ
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas(); // 初回実行
+
+  function drawMatrixEffect() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#00ff00";
     ctx.font = "16px monospace";
-    for (let i = 0; i < drops.length; i++) {
+
+    for (let i = 0; i < columns; i++) {
       const char = Math.floor(Math.random() * 10).toString();
       const x = i * 20;
       const y = drops[i] * 20;
       ctx.fillText(char, x, y);
+
+      // 画面サイズ変更に対応させるための修正
       if (y > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       } else {
@@ -217,7 +253,8 @@
       }
     }
   }
-  setInterval(draw, 33);
+
+  setInterval(drawMatrixEffect, 33);
 </script>
 </body>
 </html>

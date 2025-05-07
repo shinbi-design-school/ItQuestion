@@ -9,6 +9,14 @@ public class User_Answer {
 	private int selected_option;
 	private boolean is_correct;
 
+	private String correctOptionText;  // 正解の選択肢テキスト
+
+    public String getCorrectOptionText() {
+        return correctOptionText;
+    }
+    public void setCorrectOptionText(String correctOptionText) {
+        this.correctOptionText = correctOptionText;
+    }
 	public Question getQuestion() {
 		return question;
 	}

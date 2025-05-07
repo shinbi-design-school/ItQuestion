@@ -7,58 +7,50 @@
   <title>結果発表 | アイティークイズゲーム</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-  <style>
-    /* （CSSは元のままなので省略せずコピペOK） */
-    /* 上のスタイル部分はあなたのコードと同じ内容を使ってください */
-        body {
-      font-family: 'Share Tech Mono', monospace;
-      background: #000;
-      color: #00f0ff;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100vh;
-      position: relative;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-
-    .result-box {
-      position: absolute;
-      top: 30px;
-      left: 30px;
-      right: 100px;
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 20px 30px 140px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #00f0ff;
-      height: calc(100vh - 60px);
-      overflow-y: auto;
-      z-index: 2;
-      text-align: center;
-    }
-
+<style>
+    
+    body {
+	  font-family: 'Share Tech Mono', monospace;
+	  background: #000;
+	  color: #00f0ff;
+	  margin: 0;
+	  padding: 0;
+	  overflow: auto; 
+	}
+	
+	.result-box {
+	  position: relative; 
+	  margin: 30px auto; /* 自然な余白を追加 */
+	  max-width: 90%; /* コンテンツの幅を適切に制限 */
+	  background-color: rgba(0, 0, 0, 0.8);
+	  padding: 20px;
+	  border-radius: 12px;
+	  box-shadow: 0 0 20px #00f0ff;
+	  text-align: center;
+	}
+    
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
     .result-title {
       font-size: 36px;
       margin-bottom: 10px;
       text-shadow: 0 0 10px #00f0ff;
     }
-
+/*
     .user-name {
       font-size: 24px;
       margin-bottom: 20px;
     }
-
-    /* スコアを左寄せに変更 */
+*/
     .score-info {
       position: absolute;
       top: 80px;
-      left: 50px; /* 左に寄せる */
+      left: 50px; 
       font-size: 24px;
       font-weight: bold;
       color: #00ffff;
@@ -67,16 +59,16 @@
     }
 
     .score-point {
-      font-size: 36px;
-      margin-left: 5px;
-      color: #FFA500; /* オレンジ色 */
+      font-size: 42px;
+      margin-left: 30px;
+      color: #FFA500;
     }
 
     .question-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      margin-top: 20px;
+      margin-top: 40px;
     }
 
     .question-table th, .question-table td {
@@ -91,42 +83,13 @@
       background-color: rgba(0, 240, 255, 0.2);
     }
 
-    .col-problem { width: 45%; }
-    .col-correct { width: 40px; }
-    .col-answer { width: 30%; }
-    .col-explanation { width: 90px; }
+    .col-problem { width: 35%; }
+    .col-correct { width: 25px; }
+    .col-answer { width: 20%; }
+    .col-explanation { width: 45%; }
 
     .correct-mark { color: #00ffff; font-size: 24px; }
     .wrong-mark { color: #ff69b4; font-size: 24px; }
-
-    .explanation-row {
-      display: none;
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    .explanation-cell {
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #00f0ff;
-      border-top: none;
-    }
-
-    .toggle-btn {
-      background: none;
-      border: 1px solid #00f0ff;
-      color: #00f0ff;
-      padding: 2px 5px;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 16px;
-      transition: background 0.3s;
-      white-space: nowrap;
-    }
-
-    .toggle-btn:hover {
-      background: #00f0ff;
-      color: #000;
-    }
 
     .icon-link {
       position: fixed;
@@ -160,22 +123,34 @@
       transform: scale(1.2);
     }
 
-    .home-icon { bottom: 20px; }
-    .ranking-icon { bottom: 90px; }
+    .home-icon { top: 20px; }
+    .ranking-icon { top: 90px; }
   </style>
 </head>
 
-<body>
 
+
+
+
+
+<body>
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    if (parent && typeof parent.changeBGM === "function") {
+      parent.changeBGM("/itquestion/sound/ranking.mp3");
+      console.log("🎵 result.jsp で BGM を ranking.mp3 に切り替えました");
+    }
+  }, 300); // 再生ブロック対策の遅延
+});
+</script>
 <canvas id="matrix"></canvas>
 
 <div class="result-box">
-  <div class="result-title">結果発表</div>
-  <div class="user-name"><strong>${userName}</strong></div>
-
-  <div class="score-info">
-    あなたのスコアは<span class="score-point">${score}点</span>
-  </div>
+  <div class="result-title"><p>結果発表</p>
+  <!-- <div class="user-name"><strong>${username}</strong></div> -->
+  <div class="score-info">${username} さんのスコアは<span class="score-point">${sessionScope.score}</span>点</div>
+</div>
 
   <table class="question-table">
     <thead>
@@ -187,64 +162,108 @@
       </tr>
     </thead>
     <tbody>
-      <c:forEach var="item" items="${questionList}" varStatus="status">
-        <tr>
-          <td>${item.question}</td>
-          <td>
-            <c:choose>
-              <c:when test="${item.correctFlag}">
-                <span class="correct-mark">〇</span>
-              </c:when>
-              <c:otherwise>
-                <span class="wrong-mark">×</span>
-              </c:otherwise>
-            </c:choose>
-          </td>
-          <td>${item.correct}</td>
-          <td><button class="toggle-btn" onclick="toggleExplanation(${status.index})" id="btn-${status.index}">解説 ＋</button></td>
-        </tr>
-        <tr class="explanation-row" id="explanation-${status.index}">
-          <td colspan="4" class="explanation-cell">${item.explanation}</td>
-        </tr>
-      </c:forEach>
+    <c:set var="questionList" value="${sessionScope.resultList}" />
+    <c:if test="${empty questionList}">
+      <tr>
+        <td colspan="4">データがありません。</td>
+      </tr>
+    </c:if>
+
+
+<c:forEach var="item" items="${questionList}" varStatus="status">
+  <tr>
+    <td><c:out value="${item.question.question}" /></td>
+    <td>
+      <c:choose>
+        <c:when test="${item.is_correct eq true}">
+          <span class="correct-mark">〇</span>
+        </c:when>
+        <c:otherwise>
+          <span class="wrong-mark">×</span>
+        </c:otherwise>
+      </c:choose>
+    </td>
+      <td><c:out value="${item.correctOptionText}" /></td>
+      <td><c:out value="${item.question.description}" /></td>
+ <!-- 
+    <td>
+      <button class="toggle-btn" onclick="toggleExplanation(${status.index})" id="btn-${status.index}">解説 ＋</button>
+    </td>
+  </tr>
+  <tr class="explanation-row" id="explanation-${status.index}">
+    <td colspan="4" class="explanation-cell">
+      <c:if test="${empty item.question.description}">
+        説明なし
+      </c:if>
+      <c:if test="${not empty item.question.description}">
+        ${item.question.description}
+      </c:if>
+    </td>
+  </tr>
+  -->
+  
+</c:forEach>
+
     </tbody>
   </table>
 </div>
 
-<a href="ranking.jsp" class="icon-link ranking-icon" title="ランキングへ">ランキング</a>
-<a href="top.jsp" class="icon-link home-icon" title="トップへ">トップへ</a>
-
-
+<a href="Ranking.action" class="icon-link ranking-icon" title="ランキングへ">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#FFD700; stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#FFA500; stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <path fill="url(#goldGradient)" d="M5 8l3 3 4-8 4 8 3-3 5 9H0l5-9zm0 11h14v2H5v-2z"/>
+  </svg>
+</a>
 
 
 
 <script>
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
-  const columns = Math.floor(canvas.width / 20);
-  const drops = new Array(columns).fill(0);
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+let columns, drops;
 
-  function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#00ff00";
-    ctx.font = "16px monospace";
-    for (let i = 0; i < drops.length; i++) {
-      const text = "|";
-      const x = i * 20;
-      const y = drops[i] * 20;
-      ctx.fillText(text, x, y);
-      if (y > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      } else {
-        drops[i]++;
-      }
+function resizeCanvas() {
+  // 画面サイズに合わせる
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // 列数を再計算
+  columns = Math.floor(canvas.width / 20);
+  drops = Array(columns).fill(0); // 再定義することで描画のズレを防ぐ
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // 初回実行
+
+function drawMatrixEffect() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#00ff00";
+  ctx.font = "16px monospace";
+
+  for (let i = 0; i < columns; i++) {
+    const char = Math.floor(Math.random() * 10).toString();
+    const x = i * 20;
+    const y = drops[i] * 20;
+    ctx.fillText(char, x, y);
+
+    // 画面サイズ変更に対応させるための修正
+    if (y > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    } else {
+      drops[i]++;
     }
   }
-  setInterval(draw, 33);
+}
 
+setInterval(drawMatrixEffect, 33);
+
+/*
   function toggleExplanation(index) {
     const explanation = document.getElementById(`explanation-${index}`);
     const button = document.getElementById(`btn-${index}`);
@@ -256,6 +275,7 @@
       button.innerText = "解説 ＋";
     }
   }
+*/
 </script>
 
 </body>
