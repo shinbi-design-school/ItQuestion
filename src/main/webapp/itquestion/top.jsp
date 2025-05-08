@@ -12,8 +12,21 @@
   
   <script src="/itquestion/js/sound.js"></script>
 
+<style>
+.warning-fixed {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 35px;
+  font-weight: bold;
+  color: #ff2222;
+  padding: 8px 16px;
+  border-radius: 6px;
+  z-index: 999;
+}
 
-
+</style>
 
   
 </head>
@@ -28,7 +41,8 @@ window.addEventListener('click', () => {
 });
 </script>
 
-
+<!-- ★ 警告表示（右上固定・ぼかしなし） -->
+<div class="warning-fixed">※ブラウザバック非推奨</div>
 
   <div class="matrix-bg">
     <div class="matrix-line" style="left: 10%; animation-delay: 0s;"></div>

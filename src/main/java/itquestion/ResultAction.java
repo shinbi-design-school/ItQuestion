@@ -54,9 +54,15 @@ public class ResultAction extends Action {
             int userId = userIdObj;
 
             UserDAO userDAO = new UserDAO();
-            int latestScore = userDAO.getNowScore(userId);  // DBからスコア取得
-            userDAO.updateScore(userId, latestScore);       // DB更新
-            session.setAttribute("score", latestScore);
+            int latestScore = userDAO.getNowScore(userId);
+            if (latestScore < 101) {
+                userDAO.updateScore(userId, latestScore);
+                session.setAttribute("score", latestScore);
+            } else {
+                System.out.println("スコアが101以上のため、更新しません: " + latestScore);
+                session.setAttribute("score", latestScore); // 表示だけはする
+            }
+
 
         } else {
             // ゲスト → スコアを自前で集計（保存はしない）
