@@ -21,16 +21,28 @@ public class ResultAction extends Action {
         HttpSession session = request.getSession();
 
         try {
-            User_AnswerDAO user_answerDAO = new User_AnswerDAO();
-            resultList = user_answerDAO.getResult(); 
+            // セッションからuser_idを取得
+            Integer userIdObj = (Integer) session.getAttribute("userId");
 
-            System.out.println("ResultActionで取得したリザルトリスト: " + resultList);
+            if (userIdObj != null) {
+                int userId = userIdObj;
+
+                // User_AnswerDAOにuser_idを渡して結果を取得
+                User_AnswerDAO user_answerDAO = new User_AnswerDAO();
+                resultList = user_answerDAO.getResult(userId); // 修正されたgetResultメソッドを呼び出し
+                System.out.println("ResultActionで取得したリザルトリスト: " + resultList);
+
+            } else {
+                // ログインしていない場合
+                request.setAttribute("error", "ユーザーがログインしていません。");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "リザルト取得中にエラーが発生しました。");
         }
 
+        // リザルトリストをセッションにセット
         session.setAttribute("resultList", resultList);
         System.out.println("セッションにセットしたリザルトリスト: " + session.getAttribute("resultList"));
 
@@ -58,6 +70,6 @@ public class ResultAction extends Action {
             System.out.println("ゲストモード：スコア表示のみ：" + guestScore);
         }
 
-        return "result.jsp";
+        return "result.jsp"; // 結果ページへ遷移
     }
 }

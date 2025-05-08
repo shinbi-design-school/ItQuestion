@@ -1,21 +1,24 @@
+function setupSounds(hoverSrc = null, clickSrc = null) {
+  document.addEventListener("DOMContentLoaded", () => {
+    // ホバーとクリック対象を拡張
+    const elements = document.querySelectorAll(
+      'button, a, input[type="submit"], input[type="button"], .clickable, .home-icon, .ending-icon'
+    );
 
+    elements.forEach(el => {
+      if (hoverSrc) {
+        el.addEventListener("mouseenter", () => {
+          const hoverSound = new Audio(hoverSrc);
+          hoverSound.play().catch(e => console.error("ホバー音エラー:", e));
+        });
+      }
 
-const clickSound = new Audio("/itquestion/sound/click.mp3");
-
-
-function playClickSound() {
-  clickSound.currentTime = 0;
-  clickSound.play();
-}
-
-
-window.addEventListener('DOMContentLoaded', () => {
-  
-  const clickableElements = document.querySelectorAll('button, a, input[type="submit"], input[type="button"]');
-
-  clickableElements.forEach(elem => {
-    elem.addEventListener('click', () => {
-      playClickSound();
+      if (clickSrc) {
+        el.addEventListener("click", () => {
+          const clickSound = new Audio(clickSrc);
+          clickSound.play().catch(e => console.error("クリック音エラー:", e));
+        });
+      }
     });
   });
-});
+}

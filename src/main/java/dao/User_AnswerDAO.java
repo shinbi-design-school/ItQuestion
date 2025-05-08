@@ -59,62 +59,75 @@ public class User_AnswerDAO extends DAO {
 	}
 
 	
-	public List<User_Answer> getResult() throws Exception {
+	public List<User_Answer> getResult(int userId) throws Exception {
 	    List<User_Answer> resultList = new ArrayList<>();
+	    
+	    // user_idを条件に追加したSQLクエリ
 	    String query = "SELECT q.question, ua.is_correct, q.description, q.option1, q.option2, q.option3, q.option4, q.correct_option "
-	                 + "FROM User_Answer ua JOIN Question q ON ua.question_id = q.question_id;";
-
+	                 + "FROM User_Answer ua "
+	                 + "JOIN Question q ON ua.question_id = q.question_id "
+	                 + "WHERE ua.user_id = ?";  // user_idでフィルタリング
+	    
 	    try (Connection con = getConnection();
-	         PreparedStatement stmt = con.prepareStatement(query);
-	         ResultSet rs = stmt.executeQuery()) {
+	         PreparedStatement stmt = con.prepareStatement(query)) {
+	        
+	        // user_idをPreparedStatementにセット
+	        stmt.setInt(1, userId);
 
-	        while (rs.next()) {
-	            // Questionオブジェクトの作成
-	            Question question = new Question();
-	            question.setQuestion(rs.getString("question"));
-	            question.setDescription(rs.getString("description"));
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	                // Questionオブジェクトの作成
+	                Question question = new Question();
+	                question.setQuestion(rs.getString("question"));
+	                question.setDescription(rs.getString("description"));
 
-	            // User_Answerオブジェクトの作成
-	            User_Answer user_answer = new User_Answer();
-	            user_answer.setIs_correct(rs.getBoolean("is_correct"));
-	            user_answer.setQuestion(question);
+	                // User_Answerオブジェクトの作成
+	                User_Answer user_answer = new User_Answer();
+	                user_answer.setIs_correct(rs.getBoolean("is_correct"));
+	                user_answer.setQuestion(question);
 
-	            System.out.println("✅ 取得したデータ is_correct: " + user_answer.getIs_correct());
-	            System.out.println("✅ 取得した問題: " + question.getQuestion());
-	            System.out.println("✅ 取得した説明: " + question.getDescription());
+	                System.out.println("✅ 取得したデータ is_correct: " + user_answer.getIs_correct());
+	                System.out.println("✅ 取得した問題: " + question.getQuestion());
+	                System.out.println("✅ 取得した説明: " + question.getDescription());
 
-	            // correct_option を取得
-	            int correctIndex = rs.getInt("correct_option");
+	                // correct_option を取得
+	                int correctIndex = rs.getInt("correct_option");
 
-	            // 選択肢のリストを作成
-	            List<String> options = Arrays.asList(
-	                rs.getString("option1"),
-	                rs.getString("option2"),
-	                rs.getString("option3"),
-	                rs.getString("option4")
-	            );
+	                // 選択肢のリストを作成
+	                List<String> options = Arrays.asList(
+	                    rs.getString("option1"),
+	                    rs.getString("option2"),
+	                    rs.getString("option3"),
+	                    rs.getString("option4")
+	                );
 
-	            // 正解のオプションを取得してセット
-	            if (correctIndex >= 1 && correctIndex <= 4) {
-	                String correctOptionText = options.get(correctIndex - 1);
-	                System.out.println("正解のオプション: " + correctOptionText);
+	                // 正解のオプションを取得してセット
+	                if (correctIndex >= 1 && correctIndex <= 4) {
+	                    String correctOptionText = options.get(correctIndex - 1);
+	                    System.out.println("正解のオプション: " + correctOptionText);
 
-	                user_answer.setCorrectOptionText(correctOptionText);  // ★ ここでセット
+	                    user_answer.setCorrectOptionText(correctOptionText);  // 正解オプションをセット
+	                }
+
+	                // リストに追加
+	                resultList.add(user_answer);
 	            }
 
-	            // リストに追加
-	            resultList.add(user_answer);
-	        }
+	            System.out.println("取得したリザルトのリスト: " + resultList);
 
-	        System.out.println("取得したリザルトのリスト: " + resultList);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            System.out.println("リザルト取得時のエラー: " + e.getMessage());
+	        }
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        System.out.println("リザルト取得時のエラー: " + e.getMessage());
+	        System.out.println("データベース接続エラー: " + e.getMessage());
 	    }
 
 	    return resultList;
 	}
+
 	
 	public int deleteByUser_Answer(int user_Id) throws Exception {
         Connection con = getConnection();

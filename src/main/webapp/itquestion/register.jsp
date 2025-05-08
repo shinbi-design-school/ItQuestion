@@ -72,5 +72,10 @@ window.addEventListener('click', () => {
 </div>
 
 <div class="footer">© 2025 IT Quiz Project</div>
+
+<script src="/itquestion/js/sound.js"></script>
+    <script>
+      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+    </script>
 </body>
 </html>

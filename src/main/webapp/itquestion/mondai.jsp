@@ -353,6 +353,9 @@ window.onload = function () {
 
 }
 </script>
-
+<script src="/itquestion/js/sound.js"></script>
+<script>
+  setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/mondaiclick.mp3");
+</script>
 </body>
 </html>

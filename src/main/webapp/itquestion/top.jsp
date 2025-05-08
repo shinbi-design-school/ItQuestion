@@ -67,7 +67,20 @@ window.addEventListener('click', () => {
     <div class="footer">© 2025 IT Quiz Project</div>
   </div>
 
+<script src="/itquestion/js/sound.js"></script>
+<script>
+  setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
 
+  // top.jsp に戻ったときに start.mp3 を再生
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      if (parent && typeof parent.changeBGM === "function") {
+        parent.changeBGM("/itquestion/sound/start.mp3");
+        console.log("🎵 top.jsp で BGM を start.mp3 に切り替えました");
+      }
+    }, 300); // autoplay制限回避のための遅延
+  });
+</script>
 
 </body>
 </html>

@@ -39,7 +39,7 @@
       padding-top: 20px;
       width: 90%;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 50px auto 0 auto;
       text-align: center;
     }
     .typing-line {
@@ -200,18 +200,24 @@ window.addEventListener("load", () => {
   }
 
   function addToTopButton() {
-	    const div = document.createElement("div");
-	    div.style.textAlign = "center";
-	    const btn = document.createElement("button");
-	    btn.className = "to-top";
-	    btn.textContent = "To Top";
-	    btn.onclick = () => {
-	    	  parent.mainFrame.location.href = 'Remove.action';
-	    	};
+      const div = document.createElement("div");
+      div.style.textAlign = "center";
+      const btn = document.createElement("button");
+      btn.className = "to-top";
+      btn.textContent = "To Top";
+      btn.onclick = () => {
+            const clickSound = new Audio("/itquestion/sound/click.mp3");
+            clickSound.play().catch(e => console.error("クリック音エラー:", e));
 
-	    div.appendChild(btn);
-	    box.appendChild(div);
-	  }
+            setTimeout(() => {
+              parent.mainFrame.location.href = 'Remove.action';
+            }, 300); // 0.3秒後にページ遷移
+      };
+
+
+      div.appendChild(btn);
+      box.appendChild(div);
+    }
 
   type();
 
@@ -256,5 +262,10 @@ window.addEventListener("load", () => {
 
   setInterval(drawMatrixEffect, 33);
 </script>
+
+<script src="/itquestion/js/sound.js"></script>
+    <script>
+      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+    </script>
 </body>
 </html>

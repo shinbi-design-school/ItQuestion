@@ -29,6 +29,9 @@ window.addEventListener('click', () => {
   <p>ご利用ありがとうございました。</p>
   <button class="btn" onclick="parent.mainFrame.location.href='top.jsp'">トップに戻る</button>
   </div>
-
+<script src="/itquestion/js/sound.js"></script>
+    <script>
+      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+    </script>
 </body>
 </html>

@@ -18,6 +18,10 @@
 <body>
   <h1>BGMテストページ</h1>
   <p>このページを開いたらBGMが鳴るかチェック！</p>
+  <script src="/itquestion/js/sound.js"></script>
+    <script>
+      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+    </script>
 </body>
 </html>
 

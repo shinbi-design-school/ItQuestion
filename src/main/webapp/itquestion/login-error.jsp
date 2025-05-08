@@ -108,6 +108,10 @@ window.addEventListener('click', () => {
     <button type="button" class="btn" onclick="parent.mainFrame.location.href='top.jsp'">トップへ戻る</button>
 	<button type="button" class="btn" onclick="parent.mainFrame.location.href='login.jsp'">ログイン画面へ戻る</button>
 
+<script src="/itquestion/js/sound.js"></script>
+    <script>
+      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+    </script>
 </body>
 </html>
 
