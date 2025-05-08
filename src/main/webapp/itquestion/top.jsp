@@ -12,8 +12,7 @@
   
   <script src="/itquestion/js/sound.js"></script>
 
-<style>
-.warning-fixed {
+<style>.warning-fixed {
   position: fixed;
   top: 5%;
   left: 50%;
@@ -21,10 +20,23 @@
   font-size: 35px;
   font-weight: bold;
   color: #ff2222;
-  padding: 8px 16px;
-  border-radius: 6px;
+  text-shadow: 0 0 6px #ff2222, 0 0 12px #ff2222;
+  animation: glowPulse 2s ease-in-out infinite;
   z-index: 999;
 }
+
+/* 明滅アニメーション */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 6px #ff2222, 0 0 12px #ff2222;
+  }
+  50% {
+    opacity: 0.5;
+    text-shadow: 0 0 2px #ff2222, 0 0 4px #ff2222;
+  }
+}
+
 
 </style>
 
@@ -42,7 +54,7 @@ window.addEventListener('click', () => {
 </script>
 
 <!-- ★ 警告表示（右上固定・ぼかしなし） -->
-<div class="warning-fixed">※ブラウザバック非推奨</div>
+<div class="warning-fixed">※ブラウザバック非推奨※</div>
 
   <div class="matrix-bg">
     <div class="matrix-line" style="left: 10%; animation-delay: 0s;"></div>
