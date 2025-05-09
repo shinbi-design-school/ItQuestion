@@ -22,9 +22,12 @@ public class MondaiAction extends Action {
         User_AnswerDAO userAnswerDAO = new User_AnswerDAO();
 
         if (userId != null) {
+        	System.out.println("▶ ユーザーID " + userId + " の回答履歴を削除しました。");
+            int rows = userAnswerDAO.deleteByUser_Answer(userId);
+            System.out.println("▶ 削除された行数: " + rows);
             // ログインユーザー → 該当ユーザーの回答履歴のみ削除
             userAnswerDAO.deleteByUser_Answer(userId);
-            System.out.println("▶ ユーザーID " + userId + " の回答履歴を削除しました。");
+            
         } else {
             // ゲスト → 全件削除（注意：他のユーザー分も消える）
             userAnswerDAO.deleteAll();
