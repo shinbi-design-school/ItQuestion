@@ -162,6 +162,19 @@
 	}
 
   </style>
+  
+  <script>
+  history.pushState(null, null, location.href);
+  window.addEventListener('popstate', function () {
+    if (parent && parent.mainFrame) {
+      parent.mainFrame.location.href = "top.jsp";
+    } else {
+      // フレームで読み込まれていない場合の保険
+      window.location.href = "top.jsp";
+    }
+  });
+</script>
+  
 </head>
 
 

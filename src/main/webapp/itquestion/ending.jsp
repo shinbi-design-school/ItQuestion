@@ -16,12 +16,12 @@
       position: relative;
     }
     canvas {
-	  position: fixed;
-	  top: 0;
-	  left: 0;
-	  width: 100vw;
-	  height: 100vh;
-	}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
     .mask-layer {
       position: fixed;
       top: 0;
@@ -105,9 +105,10 @@ window.addEventListener("load", () => {
       parent.changeBGM("/itquestion/sound/ending.mp3");
       console.log("🎵 ending.jspでBGMをending.mp3に切り替えました");
     }
-  }, 300); // 再生ブロック回避のための遅延
+  }, 300);
 });
 </script>
+
 <canvas id="matrix"></canvas>
 <div class="mask-layer"></div>
 <div class="box" id="typing-box"></div>
@@ -131,7 +132,14 @@ window.addEventListener("load", () => {
   let lineIndex = 0;
   let charIndex = 0;
   let currentLine = null;
-  const typingSpeed = 50;
+
+  let isSpeedUp = false;
+  window.addEventListener("mousedown", () => isSpeedUp = true);
+  window.addEventListener("mouseup", () => isSpeedUp = false);
+  window.addEventListener("touchstart", () => isSpeedUp = true);
+  window.addEventListener("touchend", () => isSpeedUp = false);
+
+  const getTypingSpeed = () => isSpeedUp ? 10 : 50;
 
   function type() {
     if (lineIndex >= lines.length) {
@@ -161,10 +169,10 @@ window.addEventListener("load", () => {
       function typeRoleAndName() {
         if (r < line.role.length) {
           role.textContent += line.role.charAt(r++);
-          setTimeout(typeRoleAndName, typingSpeed);
+          setTimeout(typeRoleAndName, getTypingSpeed());
         } else if (n < line.name.length) {
           name.textContent += line.name.charAt(n++);
-          setTimeout(typeRoleAndName, typingSpeed);
+          setTimeout(typeRoleAndName, getTypingSpeed());
         } else {
           lineIndex++;
           setTimeout(type, 300);
@@ -190,7 +198,7 @@ window.addEventListener("load", () => {
 
       if (charIndex < line.length) {
         currentLine.textContent += line.charAt(charIndex++);
-        setTimeout(type, typingSpeed);
+        setTimeout(type, getTypingSpeed());
       } else {
         charIndex = 0;
         lineIndex++;
@@ -200,44 +208,37 @@ window.addEventListener("load", () => {
   }
 
   function addToTopButton() {
-      const div = document.createElement("div");
-      div.style.textAlign = "center";
-      const btn = document.createElement("button");
-      btn.className = "to-top";
-      btn.textContent = "To Top";
-      btn.onclick = () => {
-            const clickSound = new Audio("/itquestion/sound/click.mp3");
-            clickSound.play().catch(e => console.error("クリック音エラー:", e));
-
-            setTimeout(() => {
-              parent.mainFrame.location.href = 'Remove.action';
-            }, 300); // 0.3秒後にページ遷移
-      };
-
-
-      div.appendChild(btn);
-      box.appendChild(div);
-    }
+    const div = document.createElement("div");
+    div.style.textAlign = "center";
+    const btn = document.createElement("button");
+    btn.className = "to-top";
+    btn.textContent = "To Top";
+    btn.onclick = () => {
+      const clickSound = new Audio("/itquestion/sound/click.mp3");
+      clickSound.play().catch(e => console.error("クリック音エラー:", e));
+      setTimeout(() => {
+        parent.mainFrame.location.href = 'Remove.action';
+      }, 300);
+    };
+    div.appendChild(btn);
+    box.appendChild(div);
+  }
 
   type();
-
 
   const canvas = document.getElementById("matrix");
   const ctx = canvas.getContext("2d");
   let columns, drops;
 
   function resizeCanvas() {
-    // 画面サイズに合わせる
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
-    // 列数を再計算
     columns = Math.floor(canvas.width / 20);
-    drops = Array(columns).fill(0); // 再定義することで描画のズレを防ぐ
+    drops = Array(columns).fill(0);
   }
 
   window.addEventListener("resize", resizeCanvas);
-  resizeCanvas(); // 初回実行
+  resizeCanvas();
 
   function drawMatrixEffect() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
@@ -251,7 +252,6 @@ window.addEventListener("load", () => {
       const y = drops[i] * 20;
       ctx.fillText(char, x, y);
 
-      // 画面サイズ変更に対応させるための修正
       if (y > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       } else {
@@ -264,8 +264,8 @@ window.addEventListener("load", () => {
 </script>
 
 <script src="/itquestion/js/sound.js"></script>
-    <script>
-      setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
-    </script>
+<script>
+  setupSounds("/itquestion/sound/cursor.mp3", "/itquestion/sound/click.mp3");
+</script>
 </body>
 </html>
